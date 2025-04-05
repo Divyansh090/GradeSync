@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Student" ADD COLUMN     "paidFee" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "totalFee" INTEGER NOT NULL DEFAULT 0;

@@ -1,3 +1,4 @@
+
 import FormContainer from "@/components/FormContainer";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
@@ -11,6 +12,8 @@ import Link from "next/link";
 
 import { auth } from "@clerk/nextjs/server";
 import { Plus, Trash2 } from "lucide-react";
+import { itxClientDenyList } from "@prisma/client/runtime/library";
+import FeeStatusButton from "@/components/FeeStatusButton";
 
 type StudentList = Student & { class: Class };
 
@@ -57,49 +60,51 @@ const StudentListPage = async ({
       : []),
   ];
 
-  const renderRow = (item: StudentList) => (
-    <tr
-      key={item.id}
-      className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
-    >
-      <td className="flex items-center gap-4 p-4">
-        <Image
-          src={item.img || "/noAvatar.png"}
-          alt=""
-          width={40}
-          height={40}
-          className="md:hidden xl:block w-10 h-10 rounded-full object-cover"
-        />
-        <div className="flex flex-col">
-          <h3 className="font-semibold">{item.name}</h3>
-          <p className="text-xs text-gray-500">{item.class.name}</p>
-        </div>
-      </td>
-      <td className="hidden md:table-cell">{item.username}</td>
-      <td className="hidden md:table-cell">{item.class.name[0]}</td>
-      <td className="hidden md:table-cell">{item.phone}</td>
-      <td className="hidden md:table-cell">{item.address}</td>
-      <td>
-        <div className="flex items-center gap-2">
-          <Link href={`/list/students/${item.id}`}>
-            <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky">
-              <Image src="/view.png" alt="" width={16} height={16} />
-            </button>
-          </Link>
-         
-            {/* // <><button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurple">
-            //   <Image src="/delete.png" alt="" width={16} height={16} />
-            // </button> */}
-            <div>
-               <Trash2 width={16} height={16} />
-            <FormContainer table="student" type="delete" id={item.id} />
-            </div>
-           
-          
-        </div>
-      </td>
-    </tr>
-  );
+  const renderRow = (item: StudentList) => {
+    const unpaidAmount = item.totalFee - item.paidFee;
+    const isPaid = unpaidAmount <= 0;
+  
+    const handleClick = () => {
+      alert(`Paid: ₹${item.paidFee}\nUnpaid: ₹${unpaidAmount}`);
+    };
+  
+    return (
+      <tr
+        key={item.id}
+        className="border-b border-slate-800 even:bg-slate-800 text-sm hover:bg-lamaPurpleLight hover:text-black"
+      >
+        <td className="flex items-center gap-4 p-4">
+          <Image
+            src={item.img || "/noAvatar.png"}
+            alt=""
+            width={40}
+            height={40}
+            className="md:hidden xl:block w-10 h-10 rounded-full object-cover"
+          />
+          <div className="flex flex-col">
+            <h3 className="font-semibold">{item.name}</h3>
+            <p className="text-xs text-gray-500">{item.class.name}</p>
+          </div>
+        </td>
+        <td className="hidden md:table-cell">{item.username}</td>
+        <td className="hidden md:table-cell">{item.class.name[0]}</td>
+        <td className="hidden md:table-cell">{item.phone}</td>
+        <td className="hidden md:table-cell">{item.address}</td>
+        <td>
+          <div className="flex items-center gap-2">
+            <Link href={`/list/students/${item.id}`}>
+              <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaSky">
+                <Image src="/view.png" alt="" width={16} height={16} />
+              </button>
+            </Link>
+  
+            <FeeStatusButton paidFee={item.paidFee} unpaidAmount={unpaidAmount} />
+          </div>
+        </td>
+      </tr>
+    );
+  };
+  
 
   const { page, ...queryParams } = searchParams;
 
@@ -145,7 +150,7 @@ const StudentListPage = async ({
   ]);
 
   return (
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+    <div className="bg-slate-900 text-lamaSky border  p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP */}
       <div className="flex items-center justify-between">
         <h1 className="hidden md:block text-lg font-semibold">All Students</h1>
@@ -163,7 +168,7 @@ const StudentListPage = async ({
                 {/* <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
                 
               </button> */}
-              <Plus width={14} height={14} />
+             
               <FormContainer table="student" type="create" />
               </div>
               

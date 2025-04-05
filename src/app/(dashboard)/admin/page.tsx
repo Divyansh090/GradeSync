@@ -4,8 +4,22 @@ import CountChartContainer from "@/components/CountChartContainer";
 import EventCalendarContainer from "@/components/EventCalendarContainer";
 import FinanceChart from "@/components/FinanceChart";
 import UserCard from "@/components/UserCard";
+import { auth } from "@clerk/nextjs/server";
 
 const AdminPage = ({
+  const { id } = auth();
+
+  if (!userId) {
+    redirect("/sign-in"); // if not signed in, send to sign in page
+  }
+
+  // return (
+  //   <div className="text-white">
+  //     <h1>Private Dashboard</h1>
+  //     <p>This page is protected by Clerk.</p>
+  //   </div>
+  // );
+}
   searchParams,
 }: {
   searchParams: { [keys: string]: string | undefined };

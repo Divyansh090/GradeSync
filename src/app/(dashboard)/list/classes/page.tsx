@@ -54,7 +54,7 @@ const columns = [
 const renderRow = (item: ClassList) => (
   <tr
     key={item.id}
-    className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
+    className="border-b border even:bg-slate-900 text-lamaSky bg-slate-800 text-sm hover:bg-lamaPurpleLight hover:text-black"
   >
     <td className="flex items-center gap-4 p-4">{item.name}</td>
     <td className="hidden md:table-cell">{item.capacity}</td>
@@ -72,8 +72,8 @@ const renderRow = (item: ClassList) => (
         )}
       </div>
       <div>
-               <Trash2 width={16} height={16} />
-            <FormContainer table="class" type="delete" id={item.id} />
+              
+           
             </div>
     </td>
   </tr>
@@ -117,7 +117,7 @@ const renderRow = (item: ClassList) => (
   ]);
 
   return (
-    <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
+    <div className="bg-slate-800 border text-lamaSky p-4 rounded-md flex-1 m-4 mt-0">
       {/* TOP */}
       <div className="flex items-center justify-between">
         <h1 className="hidden md:block text-lg font-semibold">All Classes</h1>
@@ -135,7 +135,6 @@ const renderRow = (item: ClassList) => (
                 {/* <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
                 
               </button> */}
-              <Plus width={14} height={14} />
               <FormContainer table="class" type="create" />
               </div>
           </div>

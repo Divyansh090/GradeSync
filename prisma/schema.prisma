@@ -37,6 +37,8 @@ model Student {
   birthday    DateTime
     totalClasses  Int      @default(0) // Total number of classes in a semester
   takenClasses  Int      @default(0) // Number of classes attended
+   totalFee      Int          @default(0)
+  paidFee       Int          @default(0)
 }
 
 model Teacher {
